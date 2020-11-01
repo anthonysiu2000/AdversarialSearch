@@ -6,16 +6,20 @@ import random
 
 #create an object for each tile in the gameboard
 class Tile:
-    def _init(self, rowval, colval):
+    def __init__(self, rowval, colval):
         self.unit = "empty"
         self.player = "neutral"
         self.neighbors = []
         self.rowval = rowval
         self.colval = colval
 
+    def show(self, screen, color, w, h):
+        pygame.draw.rect(screen, color, (self.colval * w, self.rowval * h, w, h), 0)
+        pygame.display.update()
+
 #create a gameboard containing tiles indexed by row and column
 class Gameboard:
-    def _init_(self, side):
+    def __init__(self, side):
         self.side = side
         self.size = self.side * self.side
 
@@ -120,11 +124,7 @@ BOARD.setPits()
 
 
 cols = BOARD.side
-grid = [0 for i in range(cols)]
 row = BOARD.side
-for i in range(cols):
-    grid[i] = [0 for i in range(row)]
-
 red = (255, 0, 0)
 green = (0, 255, 0)
 blue = (0, 0, 255)
@@ -138,21 +138,21 @@ h = 729 / row
 for i in range(cols):
     for j in range(row):
         if BOARD.board[j][i].unit == "empty":
-            grid[i][j].show((255,255,255), 0)
+            BOARD.board[i][j].show(screen, (255,255,255), w, h)
         if BOARD.board[j][i].unit == "wumpus":
             if BOARD.board[j][i].player == "adversary":
-                grid[i][j].show(green, 0)
+                BOARD.board[i][j].show(screen, green, w, h)
             else:
-                grid[i][j].show(red, 0)
+                BOARD.board[i][j].show(screen, red, w, h)
         if BOARD.board[j][i].unit == "hero":
             if BOARD.board[j][i].player == "adversary":
-                grid[i][j].show(blue, 0)
+                BOARD.board[i][j].show(screen, blue, w, h)
             else:
-                grid[i][j].show(orange, 0)
+                BOARD.board[i][j].show(screen, orange, w, h)
         if BOARD.board[j][i].unit == "archer":
             if BOARD.board[j][i].player == "adversary":
-                grid[i][j].show(purple, 0)
+                BOARD.board[i][j].show(screen, purple, w, h)
             else:
-                grid[i][j].show(yellow, 0)
+                BOARD.board[i][j].show(screen, yellow, w, h)
         if BOARD.board[j][i].unit == "pit":
-            grid[i][j].show(grey, 0)
+            BOARD.board[i][j].show(screen, grey, w, h)
