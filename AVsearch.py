@@ -157,6 +157,15 @@ for i in range(cols):
         if BOARD.board[j][i].unit == "pit":
             BOARD.board[i][j].show(screen, grey, w, h)
 
+
+def mousePress(x):
+    a = x[0]
+    b = x[1]
+    g1 = a // (729 // cols)
+    g2 = b // (729 // row)
+    acess = BOARD.board[g2][g1]
+    acess.show(screen, (0, 0, 0), w, h)
+
 loop = True
 while loop:
     ev = pygame.event.get()
@@ -174,10 +183,3 @@ while loop:
                 loop = False
                 break
 
-def mousePress(x):
-    a = x[0]
-    b = x[1]
-    g1 = a // (729 // cols)
-    g2 = b // (729 // row)
-    acess = BOARD.board[g1][g2]
-    acess.show(screen, (255, 255, 255), w, h)
