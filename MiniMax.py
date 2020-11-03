@@ -47,7 +47,7 @@ def move_set(pos): # possible move
     
     
 def minimax(position, tree_depth, bMaxPlayer):
-     if d == 0 or goal(position,p_type): 
+     if tree_depth == 0 or goal(position,p_type): 
          return static_eval(position) #static evaluation
      if bMaxPlayer:
          MaxOut = -inf
