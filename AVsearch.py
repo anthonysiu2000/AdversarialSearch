@@ -53,7 +53,7 @@ class Gameboard:
         for i in range(1, self.side-1):
             #randomly chooses colomn val
             pitcol = random.randint(0, self.side-1)
-            self.board[i][pitcol].unit = "pit"
+            self.board[pitcol][i].unit = "pit"
 
 
 
@@ -156,3 +156,28 @@ for i in range(cols):
                 BOARD.board[i][j].show(screen, yellow, w, h)
         if BOARD.board[j][i].unit == "pit":
             BOARD.board[i][j].show(screen, grey, w, h)
+
+loop = True
+while loop:
+    ev = pygame.event.get()
+    for event in ev:
+        if event.type == pygame.QUIT:
+            pygame.display.quit()
+        if pygame.mouse.get_pressed()[0]:
+            try:
+                pos = pygame.mouse.get_pos()
+                mousePress(pos)
+            except AttributeError:
+                pass
+        elif event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_SPACE:
+                loop = False
+                break
+
+def mousePress(x):
+    a = x[0]
+    b = x[1]
+    g1 = a // (729 // cols)
+    g2 = b // (729 // row)
+    acess = BOARD.board[g1][g2]
+    acess.show(screen, (255, 255, 255), w, h)
