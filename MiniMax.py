@@ -42,27 +42,27 @@ def move_set(pos): # possible move
         if p_m[0] > 0 and p_m[1] > 0:
             out_m.append(p_m)
             
-    return out
+    return out_m
     
     
-    
-def minimax(position, tree_depth, bMaxPlayer):
+#
+def minimax(position, tree_depth, maximizingPlayer):
      if tree_depth == 0 or goal(position,p_type): 
          return static_eval(position) #static evaluation
-     if bMaxPlayer:
+     if maximizingPlayer:
          MaxOut = -inf
          p_moves = mov_set(position)
          for move in p_moves: # all spaces within one move of current pos
-             MaxCur = minimax(move, tree_depth − 1, False)
-             MaxOut = max(MaxOut,MaxCur)
+             currEval = minimax(move, tree_depth − 1, False)
+             MaxOut = max(MaxOut,currEval)
          return MaxOut
      
      else: 
          MinOut = inf
          p_moves = move_set(position)
          for move in p_moves:
-             MinCur = minimax(move, tree_depth − 1, True)
-             MinOut = min(MinOut,MinCur)
+             currEval = minimax(move, tree_depth − 1, True)
+             MinOut = min(MinOut,currEval)
          return MinOut
  
 
