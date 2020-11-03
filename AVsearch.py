@@ -121,6 +121,7 @@ screen = pygame.display.set_mode((729, 729))
 BOARD = Gameboard(9)
 BOARD.newBoard()
 BOARD.setPits()
+BOARD.setNeighbors()
 
 
 cols = BOARD.side
@@ -135,36 +136,117 @@ purple = (102, 0, 255)
 w = 729 / cols
 h = 729 / row
 
+#function used to modify a tile based on unit
+def showBoardUnit(screen, board, i, j):
+    global w
+    global h
+    if board[j][i].unit == "empty":
+        board[i][j].show(screen, (255,255,255), w, h)
+    if board[j][i].unit == "wumpus":
+        if board[j][i].player == "adversary":
+            board[i][j].show(screen, green, w, h)
+        else:
+            board[i][j].show(screen, red, w, h)
+    if board[j][i].unit == "hero":
+        if board[j][i].player == "adversary":
+            board[i][j].show(screen, blue, w, h)
+        else:
+            board[i][j].show(screen, orange, w, h)
+    if board[j][i].unit == "archer":
+        if board[j][i].player == "adversary":
+            board[i][j].show(screen, purple, w, h)
+        else:
+            board[i][j].show(screen, yellow, w, h)
+    if board[j][i].unit == "pit":
+        board[i][j].show(screen, (127, 127, 127), w, h)
+
+#loops through entire board to create tiles
 for i in range(cols):
     for j in range(row):
-        if BOARD.board[j][i].unit == "empty":
-            BOARD.board[i][j].show(screen, (255,255,255), w, h)
-        if BOARD.board[j][i].unit == "wumpus":
-            if BOARD.board[j][i].player == "adversary":
-                BOARD.board[i][j].show(screen, green, w, h)
-            else:
-                BOARD.board[i][j].show(screen, red, w, h)
-        if BOARD.board[j][i].unit == "hero":
-            if BOARD.board[j][i].player == "adversary":
-                BOARD.board[i][j].show(screen, blue, w, h)
-            else:
-                BOARD.board[i][j].show(screen, orange, w, h)
-        if BOARD.board[j][i].unit == "archer":
-            if BOARD.board[j][i].player == "adversary":
-                BOARD.board[i][j].show(screen, purple, w, h)
-            else:
-                BOARD.board[i][j].show(screen, yellow, w, h)
-        if BOARD.board[j][i].unit == "pit":
-            BOARD.board[i][j].show(screen, grey, w, h)
+        showBoardUnit(screen, BOARD.board, i, j)
 
 
+
+selectSecond = False
+playerTurn = True
+validDestination = False
+
+#variable used to store selected unit
+unitSelected = BOARD.board[0][0]
+
+#variable used to store desired location
+destination = BOARD.board[0][0]
+
+#when mouse clicks, selects player piece, or its desired location
 def mousePress(x):
+    global selectSecond
+    global playerTurn
+    global validDestination
+    global unitSelected
+    global destination
+    global BOARD
+    global screen
     a = x[0]
     b = x[1]
     g1 = a // (729 // cols)
     g2 = b // (729 // row)
-    acess = BOARD.board[g2][g1]
-    acess.show(screen, (0, 0, 0), w, h)
+    #selects player piece on first click
+    if selectSecond == False:
+        unitSelected = BOARD.board[g1][g2]
+        #tests if player clicks on one of their own units, or not
+        if unitSelected.player != "adversary":
+            print("invalid unit")
+            return
+        else:
+            print("selected unit")
+            selectSecond = True
+
+    #selects destination on second click
+    else:
+        destination = BOARD.board[g1][g2]
+        #tests if destination is valid; returns to unit selection if invalid
+        for neighbor in unitSelected.neighbors:
+            if destination == neighbor:
+                print("appropriate destination found")
+                validDestination = True
+        if validDestination == False:
+            selectSecond = False
+            print("invalid destination")
+            return
+        if destination.unit == "pit":
+            selectSecond = False
+            print("invalid destination")
+            return
+        if destination.player == "adversary":
+            selectSecond = False
+            print("invalid destination")
+            return
+        
+        #once verifying destination, unit goes to destination 
+        validDestination = False
+        selectSecond = False
+        Drow = destination.rowval
+        Dcol = destination.colval
+        Urow = unitSelected.rowval
+        Ucol = unitSelected.colval
+
+        BOARD.board[Drow][Dcol].player = "adversary"
+        BOARD.board[Drow][Dcol].unit = unitSelected.unit
+        BOARD.board[Urow][Ucol].player= "neutral"
+        BOARD.board[Urow][Ucol].unit = "empty"
+        #BOARD.board.refresh(Drow,Dcol)
+        #BOARD.board.refresh(Urow,Ucol)
+
+        showBoardUnit(screen, BOARD.board, Dcol, Drow)
+        showBoardUnit(screen, BOARD.board, Ucol, Urow)
+        pygame.display.update()
+
+
+        
+
+
+
+
 
 loop = True
 while loop:
@@ -182,4 +264,3 @@ while loop:
             if event.key == pygame.K_SPACE:
                 loop = False
                 break
-
