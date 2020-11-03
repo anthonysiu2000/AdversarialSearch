@@ -61,6 +61,7 @@ class Gameboard:
     def setNeighbors(self):
         for i in range(self.side):
             for j in range(self.side):
+                self.board[i][j].neighbors = []
 
                 #goes through tiles diagonal and adjacent to the tile, and appends to neighbors list
                 for k in range(-1, 2):
@@ -101,6 +102,7 @@ class Gameboard:
             for j in range(col - 1, col + 2):
                 if (j < 0) or (j >= self.side):
                     continue
+                self.board[i][j].neighbors = []
 
                 #goes through tile's diagonals and adjacents, and appends to neighbors list
                 for k in range(-1, 2):
@@ -234,8 +236,8 @@ def mousePress(x):
         BOARD.board[Drow][Dcol].unit = unitSelected.unit
         BOARD.board[Urow][Ucol].player= "neutral"
         BOARD.board[Urow][Ucol].unit = "empty"
-        #BOARD.board.refresh(Drow,Dcol)
-        #BOARD.board.refresh(Urow,Ucol)
+
+        BOARD.setNeighbors()
 
         showBoardUnit(screen, BOARD.board, Dcol, Drow)
         showBoardUnit(screen, BOARD.board, Ucol, Urow)
