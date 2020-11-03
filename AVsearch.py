@@ -91,30 +91,6 @@ class Gameboard:
         if j >= self.side or j < 0:
             return -1
         return j + i * self.side
-    
-    #refreshes a Tile's neighbors. Should be called twice after every move on tiles that change state
-    def refresh(self, row, col):
-
-        #changes the tile.neighbors surrounding and including the called tile 
-        for i in range(row - 1, row + 2):
-            if (i < 0) or (i >= self.side):
-                continue
-            for j in range(col - 1, col + 2):
-                if (j < 0) or (j >= self.side):
-                    continue
-                self.board[i][j].neighbors = []
-
-                #goes through tile's diagonals and adjacents, and appends to neighbors list
-                for k in range(-1, 2):
-                    if (i+k < 0) or (i+k >= self.side):
-                        continue
-                    for l in range(-1, 2):
-                        if (k == 0 and l == 0):
-                            continue
-                        if (j+l < 0) or (j+l >= self.side):
-                            continue
-                        self.board[i][j].neighbors.append(self.board[i + k][j + l])
-
 
 
 
