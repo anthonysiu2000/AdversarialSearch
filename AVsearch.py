@@ -6,15 +6,42 @@ import random
 
 #create an object for each tile in the gameboard
 class Tile:
+    #load in images
+    images = [
+        pygame.image.load(os.path.join("imgs", "wumpus.png")),
+        pygame.image.load(os.path.join("imgs", "mage.png")),
+        pygame.image.load(os.path.join("imgs", "hero.png"))
+    ]
     def __init__(self, rowval, colval):
         self.unit = "empty"
         self.player = "neutral"
         self.neighbors = []
         self.rowval = rowval
         self.colval = colval
+        self.img = self.images[0]
 
-    def show(self, screen, color, w, h):
-        pygame.draw.rect(screen, color, (self.colval * w, self.rowval * h, w, h), 0)
+    def show(self, screen, color, w, h, playerType):
+        #pygame.draw.rect(screen, color, (self.colval * w, self.colval * w, w, h), 0)
+        #print(str(self.colval * w) + ", " + str(self.rowval * h))
+        #pygame.draw.line(screen, (0,0,0), [self.colval * w, self.rowval*h], [self.colval * w + w, self.rowval*h + h], 1)
+        if playerType == "wumpus":
+            imageRect = self.img.get_rect()
+            screen.blit(self.img, (self.colval * w, self.rowval * h), imageRect)
+            #screen.blit(self.img, [self.colval * w, self.rowval*h])
+        if playerType == "mage":
+            self.img = self.images[1]
+            imageRect = self.img.get_rect()
+            screen.blit(self.img, (self.colval * w, self.rowval * h), imageRect)
+            #screen.blit(self.img, [self.colval * w, self.rowval*h])
+        if playerType == "hero":
+            self.img = self.images[2]
+            imageRect = self.img.get_rect()
+            screen.blit(self.img, (self.colval * w, self.rowval * h), imageRect)
+            #screen.blit(self.img, [self.colval * w, self.rowval * h])
+        if playerType == "empty":
+            pygame.draw.rect(screen, color, (self.colval * w, self.rowval * h, w, h), 0)
+        if playerType == "pit":
+            pygame.draw.rect(screen, color, (self.colval * w, self.rowval * h, w, h), 0)
         pygame.display.update()
 
 #create a gameboard containing tiles indexed by row and column
@@ -44,9 +71,6 @@ class Gameboard:
             self.board[i][0].player = "agent"
             self.board[i][self.side-1].unit = unit
             self.board[i][self.side-1].player = "adversary"
-
-
-
         
     #creates pits
     def setPits(self):
@@ -119,24 +143,24 @@ def showBoardUnit(screen, board, i, j):
     global w
     global h
     if board[j][i].unit == "empty":
-        board[i][j].show(screen, (255,255,255), w, h)
+        board[i][j].show(screen, (0,0,0), w, h, "empty")
     if board[j][i].unit == "wumpus":
         if board[j][i].player == "adversary":
-            board[i][j].show(screen, green, w, h)
+            board[i][j].show(screen, green, w, h, "wumpus")
         else:
-            board[i][j].show(screen, red, w, h)
+            board[i][j].show(screen, red, w, h, "wumpus")
     if board[j][i].unit == "hero":
         if board[j][i].player == "adversary":
-            board[i][j].show(screen, blue, w, h)
+            board[i][j].show(screen, blue, w, h, "hero")
         else:
-            board[i][j].show(screen, orange, w, h)
+            board[i][j].show(screen, orange, w, h, "hero")
     if board[j][i].unit == "archer":
         if board[j][i].player == "adversary":
-            board[i][j].show(screen, purple, w, h)
+            board[i][j].show(screen, purple, w, h, "mage")
         else:
-            board[i][j].show(screen, yellow, w, h)
+            board[i][j].show(screen, yellow, w, h, "mage")
     if board[j][i].unit == "pit":
-        board[i][j].show(screen, (127, 127, 127), w, h)
+        board[i][j].show(screen, (127, 127, 127), w, h, "pit")
 
 #loops through entire board to create tiles
 for i in range(cols):
