@@ -169,8 +169,6 @@ for i in range(cols):
     for j in range(row):
         showBoardUnit(screen, BOARD.board, i, j)
 
-
-
 selectSecond = False
 playerTurn = True
 validDestination = False
@@ -218,8 +216,19 @@ def mousePress(x):
             print("invalid destination")
             return
         if destination.unit == "pit":
+            validDestination = False
             selectSecond = False
-            print("invalid destination")
+            Drow = destination.rowval
+            Dcol = destination.colval
+            Urow = unitSelected.rowval
+            Ucol = unitSelected.colval
+            print("you hit a pit")
+            BOARD.board[unitSelected.rowval][unitSelected.colval].player = "neutral"
+            BOARD.board[unitSelected.rowval][unitSelected.colval].unit = "empty"
+            BOARD.setNeighbors()
+            #showBoardUnit(screen, BOARD.board, destination., Drow)
+            showBoardUnit(screen, BOARD.board, Ucol, Urow)
+            pygame.display.update()
             return
         if destination.player == "adversary":
             selectSecond = False
@@ -244,12 +253,6 @@ def mousePress(x):
         showBoardUnit(screen, BOARD.board, Dcol, Drow)
         showBoardUnit(screen, BOARD.board, Ucol, Urow)
         pygame.display.update()
-
-
-        
-
-
-
 
 
 loop = True
