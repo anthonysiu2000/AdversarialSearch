@@ -67,7 +67,7 @@ class Gameboard:
             elif i % 3 == 1:
                 unit = "hero"
             else:
-                unit = "archer"
+                unit = "mage"
 
             self.board[i][0].unit = unit
             self.board[i][0].player = "agent"
@@ -156,7 +156,7 @@ def showBoardUnit(screen, board, i, j):
             board[i][j].show(screen, blue, w, h, "hero")
         else:
             board[i][j].show(screen, orange, w, h, "hero")
-    if board[j][i].unit == "archer":
+    if board[j][i].unit == "mage":
         if board[j][i].player == "adversary":
             board[i][j].show(screen, purple, w, h, "mage")
         else:
@@ -168,6 +168,28 @@ def showBoardUnit(screen, board, i, j):
 for i in range(cols):
     for j in range(row):
         showBoardUnit(screen, BOARD.board, i, j)
+
+def matchup(p_type,adv_type):
+    if adv_type == "empty" or p_type == "empty":
+        return "Win"
+    if p_type == adv_type:
+        return "draw"
+    else:
+        if adv_type == "Mage":
+            if p_type == "Wumpus":
+                return "Win"
+            else:
+                return "Loss"
+        elif adv_type == "Wumpus":
+            if p_type == "Hero":
+                return "Win"
+            else:
+                return "Loss"
+        else:
+            if p_type == "Mage":
+                return "Win"
+            else:
+                return "Loss"
 
 selectSecond = False
 playerTurn = True
@@ -215,6 +237,10 @@ def mousePress(x):
             selectSecond = False
             print("invalid destination")
             return
+        if destination.player == "adversary":
+            selectSecond = False
+            print("invalid destination")
+            return
         if destination.unit == "pit":
             validDestination = False
             selectSecond = False
@@ -230,11 +256,21 @@ def mousePress(x):
             showBoardUnit(screen, BOARD.board, Ucol, Urow)
             pygame.display.update()
             return
-        if destination.player == "adversary":
+        if matchup(unitSelected.unit, destination.unit) == "Loss":
+            validDestination = False
             selectSecond = False
-            print("invalid destination")
+            Drow = destination.rowval
+            Dcol = destination.colval
+            Urow = unitSelected.rowval
+            Ucol = unitSelected.colval
+            print("you hit a guy who kills you")
+            BOARD.board[unitSelected.rowval][unitSelected.colval].player = "neutral"
+            BOARD.board[unitSelected.rowval][unitSelected.colval].unit = "empty"
+            BOARD.setNeighbors()
+            showBoardUnit(screen, BOARD.board, Ucol, Urow)
+            pygame.display.update()
             return
-        
+
         #once verifying destination, unit goes to destination 
         validDestination = False
         selectSecond = False
