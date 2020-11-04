@@ -8,15 +8,43 @@ import math
 def euclid_dist(p1,p2):
     return  np.sqrt((p1[0]-p2[0])^2 + (p1[1]-p2[1])^2)
     
+def matchup(p_type,adv_type):
+    if p_type == adv_type:
+        return "draw"
+    else:
+        if adv_type == "Mage":
+            if p_type == "Wumpus":
+                return "Win"
+            else:
+                return "Loss"
+        elif adv_type == "Wumpus":
+            if p_type == "Hero":
+                return "Win"
+            else:
+                return "Loss"
+        else:
+            if p_type == "Mage":
+                return "Win"
+            else:
+                return "Loss"
 
-
+                
 """ 
 def closest_m(pos, peice_type, m_type):
     if m_type = win:
         win_matchups = []  
-    
-        return min(euclid_dist(pos,m_1),euclid_dist(pos,m_1),\ 
-                   euclid_dist(pos,m_3))
+        for w_m in win_matchups: 
+            m_loss = [None]*0
+            positions  = move_set(w_m) 
+            for moves in position:
+                if matchup(moves) == "Loss":
+                    m_loss.append(moves) 
+        
+        if len(m_loss) == 0:
+            return min(euclid_dist(pos,m_1),euclid_dist(pos,m_1),\ 
+                   euclid_dist(pos,m_3)) 
+        else: 
+            
     else:
         draw_matchups = [] 
         return min(euclid_dist(pos,m_1),euclid_dist(pos,m_1),\ 
