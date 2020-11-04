@@ -175,18 +175,18 @@ def matchup(p_type,adv_type):
     if p_type == adv_type:
         return "draw"
     else:
-        if adv_type == "Mage":
-            if p_type == "Wumpus":
+        if adv_type == "mage":
+            if p_type == "wumpus":
                 return "Win"
             else:
                 return "Loss"
-        elif adv_type == "Wumpus":
-            if p_type == "Hero":
+        elif adv_type == "wumpus":
+            if p_type == "hero":
                 return "Win"
             else:
                 return "Loss"
         else:
-            if p_type == "Mage":
+            if p_type == "mage":
                 return "Win"
             else:
                 return "Loss"
@@ -253,20 +253,6 @@ def mousePress(x):
             BOARD.board[unitSelected.rowval][unitSelected.colval].unit = "empty"
             BOARD.setNeighbors()
             #showBoardUnit(screen, BOARD.board, destination., Drow)
-            showBoardUnit(screen, BOARD.board, Ucol, Urow)
-            pygame.display.update()
-            return
-        if matchup(unitSelected.unit, destination.unit) == "Loss":
-            validDestination = False
-            selectSecond = False
-            Drow = destination.rowval
-            Dcol = destination.colval
-            Urow = unitSelected.rowval
-            Ucol = unitSelected.colval
-            print("you hit a guy who kills you")
-            BOARD.board[unitSelected.rowval][unitSelected.colval].player = "neutral"
-            BOARD.board[unitSelected.rowval][unitSelected.colval].unit = "empty"
-            BOARD.setNeighbors()
             showBoardUnit(screen, BOARD.board, Ucol, Urow)
             pygame.display.update()
             return
