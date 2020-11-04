@@ -145,7 +145,7 @@ def showBoardUnit(screen, board, i, j):
     global w
     global h
     if board[j][i].unit == "empty":
-        board[i][j].show(screen, (255,255,255), w, h, "empty")
+        board[i][j].show(screen, (127,127,127), w, h, "empty")
     if board[j][i].unit == "wumpus":
         if board[j][i].player == "adversary":
             board[i][j].show(screen, green, w, h, "wumpus")
@@ -162,7 +162,7 @@ def showBoardUnit(screen, board, i, j):
         else:
             board[i][j].show(screen, yellow, w, h, "mage")
     if board[j][i].unit == "pit":
-        board[i][j].show(screen, (127, 127, 127), w, h, "pit")
+        board[i][j].show(screen, red, w, h, "pit")
 
 #loops through entire board to create tiles
 for i in range(cols):
