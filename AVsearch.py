@@ -23,7 +23,6 @@ class Tile:
     def show(self, screen, color, w, h, playerType):
         #pygame.draw.rect(screen, color, (self.colval * w, self.colval * w, w, h), 0)
         #print(str(self.colval * w) + ", " + str(self.rowval * h))
-        #pygame.draw.line(screen, (0,0,0), [self.colval * w, self.rowval*h], [self.colval * w + w, self.rowval*h + h], 1)
         if playerType == "wumpus":
             imageRect = self.img.get_rect()
             screen.blit(self.img, (self.colval * w, self.rowval * h), imageRect)
@@ -42,6 +41,9 @@ class Tile:
             pygame.draw.rect(screen, color, (self.colval * w, self.rowval * h, w, h), 0)
         if playerType == "pit":
             pygame.draw.rect(screen, color, (self.colval * w, self.rowval * h, w, h), 0)
+        
+        pygame.draw.line(screen, (0,0,0), [self.colval * w, self.rowval*h], [self.colval * w + w, self.rowval*h], 1)
+        pygame.draw.line(screen, (0,0,0), [self.colval * w, self.rowval*h], [self.colval * w, self.rowval*h + h], 1)
         pygame.display.update()
 
 #create a gameboard containing tiles indexed by row and column
@@ -143,7 +145,7 @@ def showBoardUnit(screen, board, i, j):
     global w
     global h
     if board[j][i].unit == "empty":
-        board[i][j].show(screen, (0,0,0), w, h, "empty")
+        board[i][j].show(screen, (255,255,255), w, h, "empty")
     if board[j][i].unit == "wumpus":
         if board[j][i].player == "adversary":
             board[i][j].show(screen, green, w, h, "wumpus")
