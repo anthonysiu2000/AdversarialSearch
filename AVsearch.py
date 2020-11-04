@@ -8,9 +8,9 @@ import random
 class Tile:
     #load in images
     images = [
-        pygame.image.load(os.path.join("imgs", "wumpus.png")),
-        pygame.image.load(os.path.join("imgs", "mage.png")),
-        pygame.image.load(os.path.join("imgs", "hero.png"))
+        pygame.image.load(os.path.join("imgs", "SmallWumpus.png")),
+        pygame.image.load(os.path.join("imgs", "SmallWizard.png")),
+        pygame.image.load(os.path.join("imgs", "SmallHero.png"))
     ]
     def __init__(self, rowval, colval):
         self.unit = "empty"
