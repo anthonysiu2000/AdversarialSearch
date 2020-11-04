@@ -265,18 +265,42 @@ def mousePress(x):
         Urow = unitSelected.rowval
         Ucol = unitSelected.colval
 
-        BOARD.board[Drow][Dcol].player = "adversary"
-        BOARD.board[Drow][Dcol].unit = unitSelected.unit
-        BOARD.board[Urow][Ucol].player= "neutral"
-        BOARD.board[Urow][Ucol].unit = "empty"
+        #checks unit matchup if unit wants to take an agent's unit
+        matchup = "winning"
+        if destination.player == "agent":
+            if destination.unit == unitSelected.unit:
+                matchup = "even"
+            if destination.unit == "hero" and unitSelected.unit == "wumpus": 
+                matchup = "losing"
+            if destination.unit == "wumpus" and unitSelected.unit == "mage": 
+                matchup = "losing"
+            if destination.unit == "mage" and unitSelected.unit == "hero": 
+                matchup = "losing"
+
+        #changes board according to action
+        if matchup == "even":
+            BOARD.board[Drow][Dcol].player = "neutral"
+            BOARD.board[Drow][Dcol].unit = "empty"
+            BOARD.board[Urow][Ucol].player= "neutral"
+            BOARD.board[Urow][Ucol].unit = "empty"
+        elif matchup == "losing":
+            BOARD.board[Urow][Ucol].player= "neutral"
+            BOARD.board[Urow][Ucol].unit = "empty"
+        else:
+            BOARD.board[Drow][Dcol].player = "adversary"
+            BOARD.board[Drow][Dcol].unit = unitSelected.unit
+            BOARD.board[Urow][Ucol].player= "neutral"
+            BOARD.board[Urow][Ucol].unit = "empty"
 
         BOARD.setNeighbors()
 
+        #updates visualization
         showBoardUnit(screen, BOARD.board, Dcol, Drow)
         showBoardUnit(screen, BOARD.board, Ucol, Urow)
         pygame.display.update()
 
 
+#visualization loop
 loop = True
 while loop:
     ev = pygame.event.get()
