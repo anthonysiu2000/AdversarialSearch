@@ -157,9 +157,9 @@ h = 729 / row
 def showBoardUnit(screen, board, i, j):
     global w
     global h
-    print("***************")
-    print(str(board[i][j].player) + "-" + str(board[i][j].unit))
-    print("***************")
+    #print("***************")
+    #print(str(board[i][j].player) + "-" + str(board[i][j].unit))
+    #print("***************")
     if board[j][i].unit == "empty":
         board[i][j].show(screen, (127,127,127), w, h, "empty")
     if board[j][i].unit == "wumpus":
@@ -174,9 +174,9 @@ def showBoardUnit(screen, board, i, j):
             board[i][j].show(screen, orange, w, h, "hero-agent")
     if board[j][i].unit == "mage":
         if board[j][i].player == "adversary":
-            board[i][j].show(screen, purple, w, h, "mage-agent")
+            board[i][j].show(screen, purple, w, h, "mage")
         else:
-            board[i][j].show(screen, yellow, w, h, "mage")
+            board[i][j].show(screen, yellow, w, h, "mage-agent")
     if board[j][i].unit == "pit":
         board[i][j].show(screen, purple, w, h, "pit")
 
