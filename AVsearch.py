@@ -353,12 +353,12 @@ def euclid_dist(p1,p2):
 def closest_m(GB, pos, m_type):
     if m_type == "win": 
         w_m = [ euclid_dist([pos.rowval,pos.colval],[p.rowval,p.colval]) 
-        for p in get_peices(GB,win_matchup(pos.unit)) ] 
+        for p in get_pieces(GB,win_matchup(pos.unit)) ] 
         return  min(w_m)
             
     else:
         d_m = [ euclid_dist([pos.rowval,pos.colval],[p.rowval,p.colval]) 
-        for p in get_peices(GB,pos.unit) ]
+        for p in get_pieces(GB,pos.unit) ]
         return min(d_m) 
 
 
@@ -372,21 +372,21 @@ def static_eval(GB,position):
 
 
 def minimax(GB,position, tree_depth, maximizingPlayer):
-     if tree_depth == 0 or goal(position,p_type): 
+     if tree_depth == 0 :#or goal(position,p_type): 
          return static_eval(position) #static evaluation
      if maximizingPlayer:
-         MaxOut = -inf
+         MaxOut = -math.inf
          p_moves = position.neighbors
          for move in p_moves: # all spaces within one move of current pos
-             currEval = minimax(GB, move, tree_depth − 1, False)
+             currEval = minimax(GB, move, tree_depth - 1, False)
              MaxOut = max(MaxOut,currEval)
          return MaxOut
      
      else: 
-         MinOut = inf
+         MinOut = math.inf
          p_moves = position.neighbors
          for move in p_moves:
-             currEval = minimax(GB, move, tree_depth − 1, True)
+             currEval = minimax(GB, move, tree_depth - 1, True)
              MinOut = min(MinOut,currEval)
          return MinOut
 

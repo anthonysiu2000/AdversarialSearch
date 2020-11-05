@@ -93,7 +93,36 @@ def minimax(position, tree_depth, maximizingPlayer):
              MinOut = min(MinOut,currEval)
          return MinOut
  
+def AB_minimax(position, tree_depth, alpha, beta, maximizingPlayer):
+     if tree_depth == 0 or goal(position,p_type): 
+         return static_eval(position) #static evaluation
+     if maximizingPlayer:
+         MaxOut = -inf
+         p_moves = mov_set(position)
+         for move in p_moves: # all spaces within one move of current pos
+             currEval = minimax(move, tree_depth − 1, False)
+             MaxOut = max(MaxOut,currEval) 
+             alpha = max(alpha,currEval) 
+             
+             if beta < alpha or beta == alpha:
+                 break
+         
+         return MaxOut
+     
+     else: 
+         MinOut = inf
+         p_moves = move_set(position)
+         for move in p_moves:
+             currEval = minimax(move, tree_depth − 1, True)
+             MinOut = min(MinOut,currEval)
+             beta  = min(beta, currEval)
+             if beta < alpha or beta == alpha:
+                 break
+         return MinOut
 
+
+
+"""
 def alphabeta(node, depth, alpha, beta, maximizingPlayer): 
 
     if depth = 0 or node is a terminal node: 
@@ -134,3 +163,4 @@ def alphabeta(node, depth, alpha, beta, maximizingPlayer):
                     break #(* α cut-off *)
         
         return value
+"""
