@@ -26,6 +26,7 @@ class Tile:
     def show(self, screen, color, w, h, playerType):
         #pygame.draw.rect(screen, color, (self.colval * w, self.colval * w, w, h), 0)
         if playerType == "wumpus":
+            self.img = self.images[0]
             imageRect = self.img.get_rect()
             screen.blit(self.img, (self.colval * w, self.rowval * h), imageRect)
             #screen.blit(self.img, [self.colval * w, self.rowval*h])
