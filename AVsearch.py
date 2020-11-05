@@ -10,7 +10,10 @@ class Tile:
     images = [
         pygame.image.load(os.path.join("imgs", "SmallWumpus.png")),
         pygame.image.load(os.path.join("imgs", "SmallWizard.png")),
-        pygame.image.load(os.path.join("imgs", "SmallHero.png"))
+        pygame.image.load(os.path.join("imgs", "SmallHero.png")),
+        pygame.image.load(os.path.join("imgs", "SmallWumpusADV.png")),
+        pygame.image.load(os.path.join("imgs", "SmallWizardADV.png")),
+        pygame.image.load(os.path.join("imgs", "SmallHeroADV.png"))
     ]
     def __init__(self, rowval, colval):
         self.unit = "empty"
@@ -22,7 +25,6 @@ class Tile:
 
     def show(self, screen, color, w, h, playerType):
         #pygame.draw.rect(screen, color, (self.colval * w, self.colval * w, w, h), 0)
-        #print(str(self.colval * w) + ", " + str(self.rowval * h))
         if playerType == "wumpus":
             imageRect = self.img.get_rect()
             screen.blit(self.img, (self.colval * w, self.rowval * h), imageRect)
@@ -37,6 +39,18 @@ class Tile:
             imageRect = self.img.get_rect()
             screen.blit(self.img, (self.colval * w, self.rowval * h), imageRect)
             #screen.blit(self.img, [self.colval * w, self.rowval * h])
+        if playerType == "wumpus-agent":
+            self.img = self.images[3]
+            imageRect = self.img.get_rect()
+            screen.blit(self.img, (self.colval * w, self.rowval * h), imageRect)
+        if playerType == "mage-agent":
+            self.img = self.images[4]
+            imageRect = self.img.get_rect()
+            screen.blit(self.img, (self.colval * w, self.rowval * h), imageRect)
+        if playerType == "hero-agent":
+            self.img = self.images[5]
+            imageRect = self.img.get_rect()
+            screen.blit(self.img, (self.colval * w, self.rowval * h), imageRect)
         if playerType == "empty":
             pygame.draw.rect(screen, color, (self.colval * w, self.rowval * h, w, h), 0)
         if playerType == "pit":
@@ -80,8 +94,6 @@ class Gameboard:
             #randomly chooses colomn val
             pitcol = random.randint(0, self.side-1)
             self.board[pitcol][i].unit = "pit"
-
-
 
     #sets neighbors for all Tiles
     def setNeighbors(self):
@@ -150,15 +162,15 @@ def showBoardUnit(screen, board, i, j):
         if board[j][i].player == "adversary":
             board[i][j].show(screen, green, w, h, "wumpus")
         else:
-            board[i][j].show(screen, red, w, h, "wumpus")
+            board[i][j].show(screen, red, w, h, "wumpus-agent")
     if board[j][i].unit == "hero":
         if board[j][i].player == "adversary":
             board[i][j].show(screen, blue, w, h, "hero")
         else:
-            board[i][j].show(screen, orange, w, h, "hero")
+            board[i][j].show(screen, orange, w, h, "hero-agent")
     if board[j][i].unit == "mage":
         if board[j][i].player == "adversary":
-            board[i][j].show(screen, purple, w, h, "mage")
+            board[i][j].show(screen, purple, w, h, "mage-agent")
         else:
             board[i][j].show(screen, yellow, w, h, "mage")
     if board[j][i].unit == "pit":
