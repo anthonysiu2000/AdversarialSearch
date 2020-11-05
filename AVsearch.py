@@ -489,12 +489,12 @@ while loop:
                     mp = "losing"
 
             #changes board according to action
-            if matchup == "even":
+            if mp == "even":
                 BOARD.board[Drow][Dcol].player = "neutral"
                 BOARD.board[Drow][Dcol].unit = "empty"
                 BOARD.board[Urow][Ucol].player= "neutral"
                 BOARD.board[Urow][Ucol].unit = "empty"
-            elif matchup == "losing":
+            elif mp == "losing":
                 BOARD.board[Urow][Ucol].player= "neutral"
                 BOARD.board[Urow][Ucol].unit = "empty"
             else:
