@@ -307,7 +307,9 @@ def mousePress(x):
             BOARD.board[Urow][Ucol].unit = "empty"
 
         BOARD.setNeighbors()
-
+        print("-----------")
+        print(str(unitSelected.player) + "-" + str(unitSelected.unit))
+        print(str(destination.player) + "-" + str(destination.unit))
         #updates visualization
         showBoardUnit(screen, BOARD.board, Dcol, Drow)
         showBoardUnit(screen, BOARD.board, Ucol, Urow)
