@@ -8,12 +8,12 @@ import numpy as np
 class Tile:
     #load in images
     images = [
-        pygame.image.load("C:/PYTHONSTUFF/AdversarialSearch/imgs/SmallWumpus.png"),
-        pygame.image.load("C:/PYTHONSTUFF/AdversarialSearch/imgs/SmallWizard.png"),
-        pygame.image.load("C:/PYTHONSTUFF/AdversarialSearch/imgs/SmallHero.png"),
-        pygame.image.load("C:/PYTHONSTUFF/AdversarialSearch/imgs/SmallWumpusADV.png"),
-        pygame.image.load("C:/PYTHONSTUFF/AdversarialSearch/imgs/SmallWizardADV.png"),
-        pygame.image.load("C:/PYTHONSTUFF/AdversarialSearch/imgs/SmallHeroADV.png")
+        pygame.image.load("imgs/SmallWumpus.png"),
+        pygame.image.load("imgs/SmallWizard.png"),
+        pygame.image.load("imgs/SmallHero.png"),
+        pygame.image.load("imgs/SmallWumpusADV.png"),
+        pygame.image.load("imgs/SmallWizardADV.png"),
+        pygame.image.load("imgs/SmallHeroADV.png")
     ]
     def __init__(self, rowval, colval):
         self.unit = "empty"
