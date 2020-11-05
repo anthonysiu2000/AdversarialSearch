@@ -156,6 +156,9 @@ h = 729 / row
 def showBoardUnit(screen, board, i, j):
     global w
     global h
+    print("***************")
+    print(str(board[i][j].player) + "-" + str(board[i][j].unit))
+    print("***************")
     if board[j][i].unit == "empty":
         board[i][j].show(screen, (127,127,127), w, h, "empty")
     if board[j][i].unit == "wumpus":
