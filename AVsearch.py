@@ -382,8 +382,8 @@ def closest_m(GB, pos, m_type):
 
 def static_eval(GB,position): 
     
-    return 1/(0.25 * total_pieces(GB) #+ 0.25 * closest_m(GB, position, "draw") 
-    + 0.50 * closest_m(GB,position,"win"))
+    return 0.70 * total_pieces(GB) #+ 0.25 * closest_m(GB, position, "draw") 
+    + 0.20 * (1/closest_m(GB,position,"win"))
 
 
 def minimax(GB,position, tree_depth, maximizingPlayer):
