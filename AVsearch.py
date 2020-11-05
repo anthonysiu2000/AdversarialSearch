@@ -392,9 +392,11 @@ def minimax(GB,position, tree_depth, maximizingPlayer):
      if maximizingPlayer:
          MaxOut = -math.inf
          p_moves = position.neighbors
-         bestMove = p_moves[0]
+         for move in p_moves:
+             if move.player != "agent":
+                bestMove = move
          for move in p_moves:  # all spaces within one move of current pos
-             if move.unit == "pit" or move.unit == "empty":
+             if move.unit == "pit" or move.unit == "empty" or move.player == "agent":
                  continue   
              currEval, bestMove = minimax(GB, move, tree_depth - 1, False)
              if MaxOut < currEval:
