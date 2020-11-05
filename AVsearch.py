@@ -276,6 +276,7 @@ def mousePress(x):
         Dcol = destination.colval
         Urow = unitSelected.rowval
         Ucol = unitSelected.colval
+        print(str(unitSelected.player) + "-" + str(unitSelected.unit))
 
         #checks unit matchup if unit is able to take an agent's unit
         matchup = "winning"
