@@ -376,19 +376,27 @@ def minimax(GB,position, tree_depth, maximizingPlayer):
          return static_eval(position) #static evaluation
      if maximizingPlayer:
          MaxOut = -math.inf
+         bestMove = None
          p_moves = position.neighbors
          for move in p_moves: # all spaces within one move of current pos
-             currEval = minimax(GB, move, tree_depth - 1, False)
-             MaxOut = max(MaxOut,currEval)
-         return MaxOut
+             currEval, bestMove = minimax(GB, move, tree_depth - 1, False)
+             if MaxOut > currEval:
+                 bestMove = move
+                 MaxOut = currEval
+             #MaxOut = max(MaxOut,currEval)
+         return MaxOut, bestMove
      
      else: 
          MinOut = math.inf
+         bestMove = None
          p_moves = position.neighbors
          for move in p_moves:
              currEval = minimax(GB, move, tree_depth - 1, True)
-             MinOut = min(MinOut,currEval)
-         return MinOut
+             if MinOut < currEval:
+                 bestMove = move
+                 MinOut = currEval
+             #MinOut = min(MinOut,currEval)
+         return MinOut, bestMove
 
 """
 
