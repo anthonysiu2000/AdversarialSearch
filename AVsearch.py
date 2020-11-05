@@ -325,6 +325,17 @@ def mousePress(x):
 From this point on we are going to include the ai for the game 
 """ 
 
+def total_pieces(GB):
+    count = 0 
+    for i in range(GB.side):
+        for j in range(GB.side):
+            if GB.board[i][j].unit != "pit" or GB.board[i][j].unit != "empty":
+                count+=1
+    
+    return count
+
+
+
 def get_pieces(GB, p_type):
     p_loc = [None]*0
     for i in range(GB.side):
@@ -364,23 +375,23 @@ def closest_m(GB, pos, m_type):
 
 def static_eval(GB,position): 
     
-    return 0.25 * pieces_left + 0.25 * closest_m(GB,position,"draw")  
+    return 0.25 * total_pieces(GB) + 0.25 * closest_m(GB,position,"draw")  
     + 0.50 * closest_m(GB,position,"win")
 
 
 
 
 
-def minimax(GB,position, tree_depth, maximizingPlayer):
+def minimax(GB, position, tree_depth, maximizingPlayer):
      if tree_depth == 0 :#or goal(position,p_type): 
-         return static_eval(position) #static evaluation
+         return static_eval(GB,position) #static evaluation
      if maximizingPlayer:
          MaxOut = -math.inf
          bestMove = None
          p_moves = position.neighbors
          for move in p_moves: # all spaces within one move of current pos
              currEval, bestMove = minimax(GB, move, tree_depth - 1, False)
-             if MaxOut > currEval:
+             if MaxOut < currEval:
                  bestMove = move
                  MaxOut = currEval
              #MaxOut = max(MaxOut,currEval)
@@ -392,7 +403,7 @@ def minimax(GB,position, tree_depth, maximizingPlayer):
          p_moves = position.neighbors
          for move in p_moves:
              currEval = minimax(GB, move, tree_depth - 1, True)
-             if MinOut < currEval:
+             if MinOut > currEval:
                  bestMove = move
                  MinOut = currEval
              #MinOut = min(MinOut,currEval)
