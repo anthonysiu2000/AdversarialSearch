@@ -338,7 +338,7 @@ def get_pieces(GB, p_type):
     p_loc = [None]*0
     for i in range(GB.side):
         for j in range(GB.side):
-            if GB.board[i][j].player == "adversary":
+            if GB.board[i][j].player == "agent":
                 if GB.board[i][j].unit == p_type:
                     p_loc.append(GB.board[i][j])
     
@@ -373,23 +373,20 @@ def closest_m(GB, pos, m_type):
 
 def static_eval(GB,position): 
     
-    return 0.25 * total_pieces(GB) + 0.25 * closest_m(GB,position,"draw")  
+    return 0.25 * total_pieces(GB) + 0.25 * closest_m(GB, position, "draw") 
     + 0.50 * closest_m(GB,position,"win")
-
-
-
 
 
 def minimax(GB,position, tree_depth, maximizingPlayer):
      if tree_depth == 0 :#or goal(position,p_type): 
-         return static_eval(GB, position) #static evaluation
+         return static_eval(GB, position), position #static evaluation
      if maximizingPlayer:
          MaxOut = -math.inf
-         bestMove = None
          p_moves = position.neighbors
+         bestMove = p_moves[0]
          for move in p_moves:  # all spaces within one move of current pos
-             if move.unit == "pit":
-                 continue
+             if move.unit == "pit" or move.unit == "empty":
+                 continue   
              currEval, bestMove = minimax(GB, move, tree_depth - 1, False)
              if MaxOut < currEval:
                  bestMove = move
@@ -399,12 +396,12 @@ def minimax(GB,position, tree_depth, maximizingPlayer):
      
      else: 
          MinOut = math.inf
-         bestMove = None
          p_moves = position.neighbors
+         bestMove = p_moves[0]
          for move in p_moves:
-             if move.unit == "pit":
+             if move.unit == "pit" or move.unit == "empty":
                  continue
-             currEval = minimax(GB, move, tree_depth - 1, True)
+             currEval, bestMove = minimax(GB, move, tree_depth - 1, True)
              if MinOut > currEval:
                  bestMove = move
                  MinOut = currEval
@@ -451,6 +448,7 @@ while loop:
     ev = pygame.event.get()
     for event in ev:
         if playerTurn == False:
+            
             #the unit(string value) that beats the piece that was just moved
             pToMove = win_matchup(destination.unit) 
             possiblePieces = get_pieces(BOARD, pToMove)
