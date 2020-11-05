@@ -335,12 +335,21 @@ def total_pieces(GB):
     return count
 
 def get_pieces(GB, p_type):
+    
     p_loc = [None]*0
-    for i in range(GB.side):
-        for j in range(GB.side):
-            if GB.board[i][j].player == "agent":
-                if GB.board[i][j].unit == p_type:
+    
+    if p_type == "all":
+        for i in range(GB.side):
+            for j in range(GB.side):
+                if GB.board[i][j].player == "agent":
                     p_loc.append(GB.board[i][j])
+        
+    else:
+        for i in range(GB.side):
+            for j in range(GB.side):
+                if GB.board[i][j].player == "agent":
+                    if GB.board[i][j].unit == p_type:
+                        p_loc.append(GB.board[i][j])
     
     if(len(p_loc)==0):
         return None
@@ -373,7 +382,7 @@ def closest_m(GB, pos, m_type):
 
 def static_eval(GB,position): 
     
-    return 0.25 * total_pieces(GB) + 0.25 * closest_m(GB, position, "draw") 
+    return 0.25 * total_pieces(GB) #+ 0.25 * closest_m(GB, position, "draw") 
     + 0.50 * closest_m(GB,position,"win")
 
 
@@ -450,25 +459,30 @@ while loop:
         if playerTurn == False:
             
             #the unit(string value) that beats the piece that was just moved
-            pToMove = win_matchup(destination.unit) 
-            possiblePieces = get_pieces(BOARD, pToMove)
-            dummyVariable, destination = minimax(BOARD, possiblePieces[0], 3, True)
-            unitSelected = possiblePieces[0]
+            #pToMove = win_matchup(destination.unit) 
+            
+            #possiblePieces = get_pieces(BOARD, pToMove)
+            possiblePieces = get_pieces(BOARD,"all") 
+            pToMove = random.randrange(len(possiblePieces))
+            dummyVariable, destination = minimax(BOARD, possiblePieces[pToMove] 
+            , 3, True)
+            unitSelected = possiblePieces[pToMove]
 
             Drow = destination.rowval
             Dcol = destination.colval
             Urow = unitSelected.rowval
             Ucol = unitSelected.colval
-            matchup = "winning"
+            
+            mp = "winning"
             if destination.player == "adversary":
                 if destination.unit == unitSelected.unit:
-                    matchup = "even"
+                    mp = "even"
                 if destination.unit == "hero" and unitSelected.unit == "wumpus": 
-                    matchup = "losing"
+                    mp = "losing"
                 if destination.unit == "wumpus" and unitSelected.unit == "mage": 
-                    matchup = "losing"
+                    mp = "losing"
                 if destination.unit == "mage" and unitSelected.unit == "hero": 
-                    matchup = "losing"
+                    mp = "losing"
 
             #changes board according to action
             if matchup == "even":
