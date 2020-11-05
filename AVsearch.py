@@ -321,75 +321,74 @@ def mousePress(x):
 
 """"
 From this point on we are going to include the ai for the game 
-"""
-"""
+""" 
+
+def get_pieces(GB, p_type):
+    p_loc = [None]*0
+    for i in range(GB.side):
+        for j in range(GB.side):
+            if GB.board[i][j].player == "adversary":
+                if GB.board[i][j].unit == p_type:
+                    p_loc.append(GB.board[i][j])
+    
+    if(len(p_loc)==0):
+        return None
+    else: 
+        return p_loc
+
+def win_matchup(p_type):
+    if p_type == "mage":
+        return "hero"
+    elif p_type == "hero":
+        return "wumpus"
+    else:
+        return "mage"
+
 def euclid_dist(p1,p2):
     return  np.sqrt((p1[0]-p2[0])^2 + (p1[1]-p2[1])^2)
 
 
-def closest_m(pos, peice_type, m_type):
-    if m_type = win:
-        win_matchups = []  
-        for w_m in win_matchups: 
-            m_loss = [None]*0
-            positions  = move_set(w_m) 
-            for moves in position:
-                if matchup(moves) == "Loss":
-                    m_loss.append(moves) 
-        
-        if len(m_loss) == 0:
-            return min(euclid_dist(pos,m_1),euclid_dist(pos,m_1),\ 
-                   euclid_dist(pos,m_3)) 
-        else: 
+def closest_m(GB, pos, m_type):
+    if m_type == "win": 
+        w_m = [ euclid_dist([pos.rowval,pos.colval],[p.rowval,p.colval]) 
+        for p in get_peices(GB,win_matchup(pos.unit)) ] 
+        return  min(w_m)
             
     else:
-        draw_matchups = [] 
-        return min(euclid_dist(pos,m_1),euclid_dist(pos,m_1),\ 
-                   euclid_dist(pos,m_3))
+        d_m = [ euclid_dist([pos.rowval,pos.colval],[p.rowval,p.colval]) 
+        for p in get_peices(GB,pos.unit) ]
+        return min(d_m) 
 
 
-def static_eval(position,p_type): 
+def static_eval(GB,position): 
     
-    return 0.25 * pieces_left + 0.25 * closest_m(pos,p_type,"draw") 
-    + 0.50 * closest_m(pos,p_type,"win")
+    return 0.25 * pieces_left + 0.25 * closest_m(GB,position,"draw")  
+    + 0.50 * closest_m(GB,position,"win")
 
 
 
-def move_set(pos): # possible move
-    
-    p_m= [[pos[0]-1, pos[1]], [pos[0]+1, pos[1]], [pos[0], pos[1]+1], [pos[0],\
-           pos[1]-1], [pos[0]-1, pos[1]+1], [pos[0]+1, 
-           pos[1]-1], [pos[0]-1, pos[1]-1],[pos[0]+1, pos[1]+1]]
-    
-    out_m = [None]*0
-    for move in p_m:
-        if p_m[0] > 0 and p_m[1] > 0:
-            out_m.append(p_m)
-            
-    return out_m
 
 
-
-def minimax(position, tree_depth, maximizingPlayer):
+def minimax(GB,position, tree_depth, maximizingPlayer):
      if tree_depth == 0 or goal(position,p_type): 
          return static_eval(position) #static evaluation
      if maximizingPlayer:
          MaxOut = -inf
-         p_moves = mov_set(position)
+         p_moves = position.neighbors
          for move in p_moves: # all spaces within one move of current pos
-             currEval = minimax(move, tree_depth − 1, False)
+             currEval = minimax(GB, move, tree_depth − 1, False)
              MaxOut = max(MaxOut,currEval)
          return MaxOut
      
      else: 
          MinOut = inf
-         p_moves = move_set(position)
+         p_moves = position.neighbors
          for move in p_moves:
-             currEval = minimax(move, tree_depth − 1, True)
+             currEval = minimax(GB, move, tree_depth − 1, True)
              MinOut = min(MinOut,currEval)
          return MinOut
 
-
+"""
 
 def AB_minimax(position, tree_depth, alpha, beta, maximizingPlayer):
      if tree_depth == 0 or goal(position,p_type): 
