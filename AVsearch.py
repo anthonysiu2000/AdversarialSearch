@@ -455,13 +455,14 @@ while loop:
             pToMove = win_matchup(destination.unit) 
             possiblePieces = get_pieces(BOARD, pToMove)
             dummyVariable, destination = minimax(BOARD, possiblePieces[0], 3, True)
+            unitSelected = possiblePieces[0]
 
             Drow = destination.rowval
             Dcol = destination.colval
-            Urow = possiblePieces[0].rowval
-            Ucol = unitSelected[0].colval
+            Urow = unitSelected.rowval
+            Ucol = unitSelected.colval
             matchup = "winning"
-            if destination.player == "agent":
+            if destination.player == "adversary":
                 if destination.unit == unitSelected.unit:
                     matchup = "even"
                 if destination.unit == "hero" and unitSelected.unit == "wumpus": 
@@ -481,7 +482,7 @@ while loop:
                 BOARD.board[Urow][Ucol].player= "neutral"
                 BOARD.board[Urow][Ucol].unit = "empty"
             else:
-                BOARD.board[Drow][Dcol].player = "adversary"
+                BOARD.board[Drow][Dcol].player = "agent"
                 BOARD.board[Drow][Dcol].unit = unitSelected.unit
                 BOARD.board[Urow][Ucol].player= "neutral"
                 BOARD.board[Urow][Ucol].unit = "empty"
@@ -491,7 +492,6 @@ while loop:
             #updates visualization
             showBoardUnit(screen, BOARD.board, Dcol, Drow)
             showBoardUnit(screen, BOARD.board, Ucol, Urow)
-            playerTurn = False
             pygame.display.update()
 
             playerTurn = True
