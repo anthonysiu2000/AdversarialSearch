@@ -334,8 +334,6 @@ def total_pieces(GB):
     
     return count
 
-
-
 def get_pieces(GB, p_type):
     p_loc = [None]*0
     for i in range(GB.side):
@@ -382,14 +380,16 @@ def static_eval(GB,position):
 
 
 
-def minimax(GB, position, tree_depth, maximizingPlayer):
+def minimax(GB,position, tree_depth, maximizingPlayer):
      if tree_depth == 0 :#or goal(position,p_type): 
-         return static_eval(GB,position) #static evaluation
+         return static_eval(GB, position) #static evaluation
      if maximizingPlayer:
          MaxOut = -math.inf
          bestMove = None
          p_moves = position.neighbors
-         for move in p_moves: # all spaces within one move of current pos
+         for move in p_moves:  # all spaces within one move of current pos
+             if move.unit == "pit":
+                 continue
              currEval, bestMove = minimax(GB, move, tree_depth - 1, False)
              if MaxOut < currEval:
                  bestMove = move
@@ -402,6 +402,8 @@ def minimax(GB, position, tree_depth, maximizingPlayer):
          bestMove = None
          p_moves = position.neighbors
          for move in p_moves:
+             if move.unit == "pit":
+                 continue
              currEval = minimax(GB, move, tree_depth - 1, True)
              if MinOut > currEval:
                  bestMove = move
@@ -449,7 +451,49 @@ while loop:
     ev = pygame.event.get()
     for event in ev:
         if playerTurn == False:
-            enemyturn()
+            #the unit(string value) that beats the piece that was just moved
+            pToMove = win_matchup(destination.unit) 
+            possiblePieces = get_pieces(BOARD, pToMove)
+            dummyVariable, destination = minimax(BOARD, possiblePieces[0], 3, True)
+
+            Drow = destination.rowval
+            Dcol = destination.colval
+            Urow = possiblePieces[0].rowval
+            Ucol = unitSelected[0].colval
+            matchup = "winning"
+            if destination.player == "agent":
+                if destination.unit == unitSelected.unit:
+                    matchup = "even"
+                if destination.unit == "hero" and unitSelected.unit == "wumpus": 
+                    matchup = "losing"
+                if destination.unit == "wumpus" and unitSelected.unit == "mage": 
+                    matchup = "losing"
+                if destination.unit == "mage" and unitSelected.unit == "hero": 
+                    matchup = "losing"
+
+            #changes board according to action
+            if matchup == "even":
+                BOARD.board[Drow][Dcol].player = "neutral"
+                BOARD.board[Drow][Dcol].unit = "empty"
+                BOARD.board[Urow][Ucol].player= "neutral"
+                BOARD.board[Urow][Ucol].unit = "empty"
+            elif matchup == "losing":
+                BOARD.board[Urow][Ucol].player= "neutral"
+                BOARD.board[Urow][Ucol].unit = "empty"
+            else:
+                BOARD.board[Drow][Dcol].player = "adversary"
+                BOARD.board[Drow][Dcol].unit = unitSelected.unit
+                BOARD.board[Urow][Ucol].player= "neutral"
+                BOARD.board[Urow][Ucol].unit = "empty"
+            
+
+            BOARD.setNeighbors()
+            #updates visualization
+            showBoardUnit(screen, BOARD.board, Dcol, Drow)
+            showBoardUnit(screen, BOARD.board, Ucol, Urow)
+            playerTurn = False
+            pygame.display.update()
+
             playerTurn = True
         if event.type == pygame.QUIT:
             pygame.display.quit()
