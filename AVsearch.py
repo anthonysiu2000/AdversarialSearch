@@ -309,6 +309,7 @@ def mousePress(x):
             BOARD.board[Drow][Dcol].unit = unitSelected.unit
             BOARD.board[Urow][Ucol].player= "neutral"
             BOARD.board[Urow][Ucol].unit = "empty"
+        
 
         BOARD.setNeighbors()
         print("-----------")
@@ -317,6 +318,7 @@ def mousePress(x):
         #updates visualization
         showBoardUnit(screen, BOARD.board, Dcol, Drow)
         showBoardUnit(screen, BOARD.board, Ucol, Urow)
+        playerTurn = False
         pygame.display.update()
 
 """"
@@ -427,6 +429,9 @@ loop = True
 while loop:
     ev = pygame.event.get()
     for event in ev:
+        if playerTurn == False:
+            enemyturn()
+            playerTurn = True
         if event.type == pygame.QUIT:
             pygame.display.quit()
         if pygame.mouse.get_pressed()[0]:
