@@ -94,4 +94,43 @@ def minimax(position, tree_depth, maximizingPlayer):
          return MinOut
  
 
+def alphabeta(node, depth, alpha, beta, maximizingPlayer): 
 
+    if depth = 0 or node is a terminal node: 
+        
+        return  static_eval(node) #the heuristic value of node
+   
+    if maximizingPlayer: 
+        
+        value = −inf 
+        prioirty_queue ={}
+        
+        for each child of node:
+                prioirty_queue.push(child,h(child))
+        
+        while child == prioirty_queue.pop():
+                
+                value = max(value, alphabeta(child, depth − 1, alpha, beta, FALSE)) 
+                alpha = max(alpha, value)
+                
+                if alpha > beta or alpha = beta:
+                      break #(* β cut-off *) 
+                
+                return value
+    else
+        
+        value = inf 
+        prioirty_queue:={}
+        
+        for each child of node:
+            prioirty_queue.push(child, -h(child)) 
+        
+        while child == prioirty_queue.pop(): 
+            
+            value = min(value, alphabeta(child, depth − 1, alpha, beta, TRUE))           
+            beta = min(beta, value) 
+            
+            if beta < alpha or beta = alpha:
+                    break #(* α cut-off *)
+        
+        return value

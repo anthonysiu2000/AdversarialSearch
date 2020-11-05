@@ -8,9 +8,18 @@ import random
 class Tile:
     #load in images
     images = [
+<<<<<<< HEAD
         pygame.image.load(os.path.join(/"imgs", "SmallWumpus.png")),
         pygame.image.load(os.path.join(/"imgs", "SmallWizard.png")),
         pygame.image.load(os.path.join(/"imgs", "SmallHero.png"))
+=======
+        pygame.image.load(os.path.join("imgs", "SmallWumpus.png")),
+        pygame.image.load(os.path.join("imgs", "SmallWizard.png")),
+        pygame.image.load(os.path.join("imgs", "SmallHero.png")),
+        pygame.image.load(os.path.join("imgs", "SmallWumpusADV.png")),
+        pygame.image.load(os.path.join("imgs", "SmallWizardADV.png")),
+        pygame.image.load(os.path.join("imgs", "SmallHeroADV.png"))
+>>>>>>> 69d1f7b01ecc0f3f0a658dd315013c41e99d9d48
     ]
     def __init__(self, rowval, colval):
         self.unit = "empty"
@@ -22,8 +31,8 @@ class Tile:
 
     def show(self, screen, color, w, h, playerType):
         #pygame.draw.rect(screen, color, (self.colval * w, self.colval * w, w, h), 0)
-        #print(str(self.colval * w) + ", " + str(self.rowval * h))
         if playerType == "wumpus":
+            self.img = self.images[0]
             imageRect = self.img.get_rect()
             screen.blit(self.img, (self.colval * w, self.rowval * h), imageRect)
             #screen.blit(self.img, [self.colval * w, self.rowval*h])
@@ -37,6 +46,18 @@ class Tile:
             imageRect = self.img.get_rect()
             screen.blit(self.img, (self.colval * w, self.rowval * h), imageRect)
             #screen.blit(self.img, [self.colval * w, self.rowval * h])
+        if playerType == "wumpus-agent":
+            self.img = self.images[3]
+            imageRect = self.img.get_rect()
+            screen.blit(self.img, (self.colval * w, self.rowval * h), imageRect)
+        if playerType == "mage-agent":
+            self.img = self.images[4]
+            imageRect = self.img.get_rect()
+            screen.blit(self.img, (self.colval * w, self.rowval * h), imageRect)
+        if playerType == "hero-agent":
+            self.img = self.images[5]
+            imageRect = self.img.get_rect()
+            screen.blit(self.img, (self.colval * w, self.rowval * h), imageRect)
         if playerType == "empty":
             pygame.draw.rect(screen, color, (self.colval * w, self.rowval * h, w, h), 0)
         if playerType == "pit":
@@ -80,8 +101,6 @@ class Gameboard:
             #randomly chooses colomn val
             pitcol = random.randint(0, self.side-1)
             self.board[pitcol][i].unit = "pit"
-
-
 
     #sets neighbors for all Tiles
     def setNeighbors(self):
@@ -144,25 +163,28 @@ h = 729 / row
 def showBoardUnit(screen, board, i, j):
     global w
     global h
+    #print("***************")
+    #print(str(board[i][j].player) + "-" + str(board[i][j].unit))
+    #print("***************")
     if board[j][i].unit == "empty":
         board[i][j].show(screen, (127,127,127), w, h, "empty")
     if board[j][i].unit == "wumpus":
         if board[j][i].player == "adversary":
             board[i][j].show(screen, green, w, h, "wumpus")
         else:
-            board[i][j].show(screen, red, w, h, "wumpus")
+            board[i][j].show(screen, red, w, h, "wumpus-agent")
     if board[j][i].unit == "hero":
         if board[j][i].player == "adversary":
             board[i][j].show(screen, blue, w, h, "hero")
         else:
-            board[i][j].show(screen, orange, w, h, "hero")
+            board[i][j].show(screen, orange, w, h, "hero-agent")
     if board[j][i].unit == "mage":
         if board[j][i].player == "adversary":
             board[i][j].show(screen, purple, w, h, "mage")
         else:
-            board[i][j].show(screen, yellow, w, h, "mage")
+            board[i][j].show(screen, yellow, w, h, "mage-agent")
     if board[j][i].unit == "pit":
-        board[i][j].show(screen, red, w, h, "pit")
+        board[i][j].show(screen, purple, w, h, "pit")
 
 #loops through entire board to create tiles
 for i in range(cols):
@@ -264,6 +286,8 @@ def mousePress(x):
         Dcol = destination.colval
         Urow = unitSelected.rowval
         Ucol = unitSelected.colval
+        print(str(unitSelected.player) + "-" + str(unitSelected.unit))
+        print(str(destination.player) + "-" + str(destination.unit))
 
         #checks unit matchup if unit is able to take an agent's unit
         matchup = "winning"
@@ -293,7 +317,9 @@ def mousePress(x):
             BOARD.board[Urow][Ucol].unit = "empty"
 
         BOARD.setNeighbors()
-
+        print("-----------")
+        print(str(unitSelected.player) + "-" + str(unitSelected.unit))
+        print(str(destination.player) + "-" + str(destination.unit))
         #updates visualization
         showBoardUnit(screen, BOARD.board, Dcol, Drow)
         showBoardUnit(screen, BOARD.board, Ucol, Urow)
