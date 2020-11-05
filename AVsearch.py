@@ -382,8 +382,8 @@ def closest_m(GB, pos, m_type):
 
 def static_eval(GB,position): 
     
-    return 0.25 * total_pieces(GB) #+ 0.25 * closest_m(GB, position, "draw") 
-    + 0.50 * closest_m(GB,position,"win")
+    return 1/(0.25 * total_pieces(GB) #+ 0.25 * closest_m(GB, position, "draw") 
+    + 0.50 * closest_m(GB,position,"win"))
 
 
 def minimax(GB,position, tree_depth, maximizingPlayer):
@@ -408,7 +408,9 @@ def minimax(GB,position, tree_depth, maximizingPlayer):
      else: 
          MinOut = math.inf
          p_moves = position.neighbors
-         bestMove = p_moves[0]
+         for move in p_moves:
+             if move.player != "agent":
+                bestMove = move
          for move in p_moves:
              if move.unit == "pit" or move.unit == "empty":
                  continue
