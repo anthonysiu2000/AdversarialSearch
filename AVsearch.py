@@ -174,7 +174,7 @@ def showBoardUnit(screen, board, i, j):
         else:
             board[i][j].show(screen, yellow, w, h, "mage")
     if board[j][i].unit == "pit":
-        board[i][j].show(screen, red, w, h, "pit")
+        board[i][j].show(screen, purple, w, h, "pit")
 
 #loops through entire board to create tiles
 for i in range(cols):
