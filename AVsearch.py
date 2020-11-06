@@ -382,7 +382,7 @@ def closest_m(GB, pos, m_type):
 
 def static_eval(GB,position): 
     
-    return 0.70 * total_pieces(GB) #+ 0.25 * closest_m(GB, position, "draw") 
+    return 0.70 * total_pieces(GB) + 0.20 * random.randint(1,100) #+ 0.25 * closest_m(GB, position, "draw") 
     + 0.20 * (1/closest_m(GB,position,"win"))
 
 
@@ -394,11 +394,15 @@ def minimax(GB,position, tree_depth, maximizingPlayer):
          p_moves = position.neighbors
          for move in p_moves:
              if move.player != "agent":
-                bestMove = move
+                bestMove = move 
+         print("Made it here")
          for move in p_moves:  # all spaces within one move of current pos
-             if move.unit == "pit" or move.unit == "empty" or move.player == "agent":
+             if move.unit == "pit" or move.player == "agent":
+                 print("this aint good" + move.player + " " + move.unit)
                  continue   
-             currEval, bestMove = minimax(GB, move, tree_depth - 1, False)
+             currEval, bestMove = minimax(GB,GB.board[move.rowval][move.colval]
+             , tree_depth - 1, False) 
+             print(MaxOut)
              if MaxOut < currEval:
                  bestMove = move
                  MaxOut = currEval
@@ -412,9 +416,10 @@ def minimax(GB,position, tree_depth, maximizingPlayer):
              if move.player != "agent":
                 bestMove = move
          for move in p_moves:
-             if move.unit == "pit" or move.unit == "empty":
+             if move.unit == "pit":
                  continue
-             currEval, bestMove = minimax(GB, move, tree_depth - 1, True)
+             currEval, bestMove = minimax(GB,GB.board[move.rowval][move.colval] 
+             , tree_depth - 1, True)
              if MinOut > currEval:
                  bestMove = move
                  MinOut = currEval
