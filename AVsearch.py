@@ -331,7 +331,14 @@ def total_pieces(GB):
         for j in range(GB.side):
             if GB.board[i][j].unit != "pit" or GB.board[i][j].unit != "empty":
                 count+=1
-    
+    return count
+
+def total_pieces_player(GB, player):
+    count = 0 
+    for i in range(GB.side):
+        for j in range(GB.side):
+            if GB.board[i][j].player == player and (GB.board[i][j].unit != "pit" or GB.board[i][j].unit != "empty"):
+                count+=1
     return count
 
 def get_pieces(GB, p_type):
@@ -463,13 +470,14 @@ def AB_minimax(position, tree_depth, alpha, beta, maximizingPlayer):
 
 """
 
-
-
 #visualization loop
 loop = True
 while loop:
     ev = pygame.event.get()
     for event in ev:
+        if total_pieces_player("agent") == 0 or total_pieces_player("adversary") == 0:
+            print("GAME OVER!!!")
+            pygame.display.quit()
         if playerTurn == False:
             
             #the unit(string value) that beats the piece that was just moved
