@@ -408,13 +408,13 @@ def closest_m(GB, pos, m_type):
 
 def static_eval(GB,position): 
     
-    return (1/closest_m(GB,position,"win"))
+    return closest_m(GB,position,"win")
     #return random.randint(1,100)
 
 def minimax(GB,position, tree_depth, maximizingPlayer):
      if tree_depth == 0 :#or goal(position,p_type):  
          #print(static_eval(GB,position)) 
-         print("static eval level" + position.unit)
+         print(static_eval(GB,position))
          return static_eval(GB, position), position #static evaluation
      if maximizingPlayer:
          MaxOut = -math.inf
@@ -525,7 +525,7 @@ while loop:
                     break
         
             dummyVariable, destination = minimax(BOARD, possiblePieces[pToMove] 
-            , 1, True)
+            , 3, True)
             unitSelected = possiblePieces[pToMove] 
             print("output from minimax"+ str(dummyVariable))
             print("final move"+ str([destination.rowval,destination.colval]))
