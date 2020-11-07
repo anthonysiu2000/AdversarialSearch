@@ -475,7 +475,7 @@ loop = True
 while loop:
     ev = pygame.event.get()
     for event in ev:
-        if total_pieces_player("agent") == 0 or total_pieces_player("adversary") == 0:
+        if total_pieces_player(BOARD, "agent") == 0 or total_pieces_player(BOARD, "adversary") == 0:
             print("GAME OVER!!!")
             pygame.display.quit()
         if playerTurn == False:
