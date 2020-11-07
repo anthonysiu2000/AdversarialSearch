@@ -466,37 +466,52 @@ def minimax(GB,position, tree_depth, maximizingPlayer):
              #MinOut = min(MinOut,currEval)
          return MinOut, bestMove
 
-"""
-
-def AB_minimax(position, tree_depth, alpha, beta, maximizingPlayer):
-     if tree_depth == 0 or goal(position,p_type): 
-         return static_eval(position) #static evaluation
+def alphaBetaPruning(GB, position, tree_depth, alpha, beta, maximizingPlayer):
+     if tree_depth == 0 :#or goal(position,p_type):  
+         return static_eval(GB, position), position #static evaluation
      if maximizingPlayer:
-         MaxOut = -inf
-         p_moves = mov_set(position)
+         value = -math.inf
+         p_moves = position.neighbors
+         bestMove = position
+         for move in p_moves:
+             if move.player != "agent":
+                bestMove = move
          for move in p_moves: # all spaces within one move of current pos
-             currEval = minimax(move, tree_depth − 1, False)
-             MaxOut = max(MaxOut,currEval) 
-             alpha = max(alpha,currEval) 
-             
-             if beta < alpha or beta == alpha:
+             if move.unit == "pit" or move.player == "agent":
+                 continue   
+             currEval, bs = alphaBetaPruning(GB,GB.board[move.rowval][move.colval]
+             , tree_depth - 1, alpha, beta, False) 
+             if value < currEval:
+                 bestMove = move
+                 value = currEval 
+             alpha = max(alpha,value) 
+             #MAIN CRUCIAL CHECK HERE!
+             if beta <= alpha:
+                 print("I made it here maximizingPlayer")
                  break
-         
-         return MaxOut
+         return value, bestMove
      
      else: 
-         MinOut = inf
-         p_moves = move_set(position)
+         value = math.inf
+         p_moves = position.neighbors
+         bestMove = position
          for move in p_moves:
-             currEval = minimax(move, tree_depth − 1, True)
-             MinOut = min(MinOut,currEval)
-             beta  = min(beta, currEval)
-             if beta < alpha or beta == alpha:
+             if move.player != "agent":
+                bestMove = move 
+         for move in p_moves:
+             if move.unit == "pit" or move.player == "agent":
+                 continue
+             currEval, bs = alphaBetaPruning(GB,GB.board[move.rowval][move.colval] 
+             , tree_depth - 1, alpha, beta, True)
+             if value > currEval:
+                 bestMove = move
+                 value = currEval
+             beta  = min(beta, value)
+             #DON'T CHECK IF BETA <= ALPHA
+             if beta <= alpha:
+                 print("I made it here minimizingPlayer")
                  break
-         return MinOut
-
-
-"""
+         return value, bestMove
 
 #visualization loop
 loop = True
@@ -507,10 +522,8 @@ while loop:
             print("GAME OVER!!!")
             pygame.display.quit()
         if playerTurn == False:
-            
             #the unit(string value) that beats the piece that was just moved
             #pToMove = win_matchup(destination.unit) 
-            
             #possiblePieces = get_pieces(BOARD, pToMove)
             possiblePieces = get_pieces(BOARD,"all") 
             pToMove = random.randrange(len(possiblePieces))
@@ -524,8 +537,10 @@ while loop:
                 else:
                     break
         
-            dummyVariable, destination = minimax(BOARD, possiblePieces[pToMove] 
-            , 3, True)
+            #dummyVariable, destination = minimax(BOARD, possiblePieces[pToMove] 
+            #, 6, True)
+            dummyVariable, destination = alphaBetaPruning(BOARD, possiblePieces[pToMove] 
+            , 3, 0, 0, True)
             unitSelected = possiblePieces[pToMove] 
             print("output from minimax"+ str(dummyVariable))
             print("final move"+ str([destination.rowval,destination.colval]))
