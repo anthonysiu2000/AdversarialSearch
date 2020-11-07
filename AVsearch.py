@@ -479,8 +479,11 @@ def alphaBetaPruning(GB, position, tree_depth, alpha, beta, maximizingPlayer):
          for move in p_moves: # all spaces within one move of current pos
              if move.unit == "pit" or move.player == "agent":
                  continue   
+             hold = move.unit 
+             GB.board[move.rowval][move.colval].unit  = position.unit
              currEval, bs = alphaBetaPruning(GB,GB.board[move.rowval][move.colval]
              , tree_depth - 1, alpha, beta, False) 
+             GB.board[move.rowval][move.colval].unit = hold
              if value < currEval:
                  bestMove = move
                  value = currEval 
@@ -501,8 +504,11 @@ def alphaBetaPruning(GB, position, tree_depth, alpha, beta, maximizingPlayer):
          for move in p_moves:
              if move.unit == "pit" or move.player == "agent":
                  continue
+             hold = move.unit 
+             GB.board[move.rowval][move.colval].unit  = position.unit   
              currEval, bs = alphaBetaPruning(GB,GB.board[move.rowval][move.colval] 
              , tree_depth - 1, alpha, beta, True)
+             GB.board[move.rowval][move.colval].unit = hold
              if value > currEval:
                  bestMove = move
                  value = currEval
