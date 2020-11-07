@@ -382,12 +382,13 @@ def closest_m(GB, pos, m_type):
 
 def static_eval(GB,position): 
     
-    return 0.70 * total_pieces(GB) + 0.20 * random.randint(1,100) #+ 0.25 * closest_m(GB, position, "draw") 
-    + 0.20 * (1/closest_m(GB,position,"win"))
-
+    return 0.10 * total_pieces(GB)  #+ 0.25 * closest_m(GB, position, "draw") 
+    + 0.70 * (1/closest_m(GB,position,"win"))
+    #return random.randint(1,100)
 
 def minimax(GB,position, tree_depth, maximizingPlayer):
-     if tree_depth == 0 :#or goal(position,p_type): 
+     if tree_depth == 0 :#or goal(position,p_type):  
+         print(str([position.rowval, position.colval]))
          return static_eval(GB, position), position #static evaluation
      if maximizingPlayer:
          MaxOut = -math.inf
@@ -395,18 +396,22 @@ def minimax(GB,position, tree_depth, maximizingPlayer):
          for move in p_moves:
              if move.player != "agent":
                 bestMove = move 
-         print("Made it here")
+        #print("Made it here")
          for move in p_moves:  # all spaces within one move of current pos
              if move.unit == "pit" or move.player == "agent":
-                 print("this aint good" + move.player + " " + move.unit)
+                 #print("this aint good" + move.player + " " + move.unit)
                  continue   
-             currEval, bestMove = minimax(GB,GB.board[move.rowval][move.colval]
+             currEval, bs = minimax(GB,GB.board[move.rowval][move.colval]
              , tree_depth - 1, False) 
-             print(MaxOut)
+             
              if MaxOut < currEval:
+                 #print("Maxout "+str(MaxOut) + "currEval "+ str(currEval)) 
+                 #print("Move " + str([move.rowval,move.colval]))
                  bestMove = move
-                 MaxOut = currEval
-             #MaxOut = max(MaxOut,currEval)
+                 MaxOut = currEval 
+                #if tree_depth == 5: 
+             #    return MaxOut, bestMove
+            #MaxOut = max(MaxOut,currEval)
          return MaxOut, bestMove
      
      else: 
@@ -416,9 +421,9 @@ def minimax(GB,position, tree_depth, maximizingPlayer):
              if move.player != "agent":
                 bestMove = move
          for move in p_moves:
-             if move.unit == "pit":
+             if move.unit == "pit" or move.player == "agent":
                  continue
-             currEval, bestMove = minimax(GB,GB.board[move.rowval][move.colval] 
+             currEval, bs = minimax(GB,GB.board[move.rowval][move.colval] 
              , tree_depth - 1, True)
              if MinOut > currEval:
                  bestMove = move
@@ -474,9 +479,9 @@ while loop:
             possiblePieces = get_pieces(BOARD,"all") 
             pToMove = random.randrange(len(possiblePieces))
             dummyVariable, destination = minimax(BOARD, possiblePieces[pToMove] 
-            , 3, True)
+            , 2, True)
             unitSelected = possiblePieces[pToMove]
-
+            print("final move"+ str([destination.rowval,destination.colval]))
             Drow = destination.rowval
             Dcol = destination.colval
             Urow = unitSelected.rowval
