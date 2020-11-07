@@ -369,6 +369,7 @@ def get_ADV_pieces(GB,p_type):
             for j in range(GB.side):
                 if GB.board[i][j].player == "adversary":
                     if GB.board[i][j].unit == p_type:
+                        #print(GB.board[i][j].player)
                         p_loc.append(GB.board[i][j]) 
     
     return p_loc
@@ -393,8 +394,10 @@ def closest_m(GB, pos, m_type):
         w_m = [None]*0
         for p in get_ADV_pieces(GB,win_matchup(pos.unit)): 
             w_m.append(euclid_dist([pos.rowval,pos.colval],[p.rowval,p.colval]))
-        
-        print(min(w_m))
+        print(pos.unit)
+        for item in get_ADV_pieces(GB,win_matchup(pos.unit)):
+            print([item.rowval,item.colval])
+        print("\n")  
         return  min(w_m)
             
     else: 
@@ -410,7 +413,8 @@ def static_eval(GB,position):
 
 def minimax(GB,position, tree_depth, maximizingPlayer):
      if tree_depth == 0 :#or goal(position,p_type):  
-         print(str([position.rowval, position.colval]))
+         #print(static_eval(GB,position)) 
+         print("static eval level" + position.unit)
          return static_eval(GB, position), position #static evaluation
      if maximizingPlayer:
          MaxOut = -math.inf
@@ -423,9 +427,12 @@ def minimax(GB,position, tree_depth, maximizingPlayer):
          for move in p_moves:  # all spaces within one move of current pos
              if move.unit == "pit" or move.player == "agent":
                  #print("this aint good" + move.player + " " + move.unit)
-                 continue   
+                 continue    
+             hold = move.unit 
+             GB.board[move.rowval][move.colval].unit  = position.unit
              currEval, bs = minimax(GB,GB.board[move.rowval][move.colval]
              , tree_depth - 1, False) 
+             GB.board[move.rowval][move.colval].unit = hold
              
              if MaxOut < currEval:
                  #print("Maxout "+str(MaxOut) + "currEval "+ str(currEval)) 
@@ -447,8 +454,12 @@ def minimax(GB,position, tree_depth, maximizingPlayer):
          for move in p_moves:
              if move.unit == "pit" or move.player == "agent":
                  continue
+             hold = move.unit 
+             GB.board[move.rowval][move.colval].unit  = position.unit
              currEval, bs = minimax(GB,GB.board[move.rowval][move.colval] 
-             , tree_depth - 1, True)
+              , tree_depth - 1, True)
+             GB.board[move.rowval][move.colval].unit = hold
+             
              if MinOut > currEval:
                  bestMove = move
                  MinOut = currEval
@@ -514,8 +525,9 @@ while loop:
                     break
         
             dummyVariable, destination = minimax(BOARD, possiblePieces[pToMove] 
-            , 2, True)
-            unitSelected = possiblePieces[pToMove]
+            , 1, True)
+            unitSelected = possiblePieces[pToMove] 
+            print("output from minimax"+ str(dummyVariable))
             print("final move"+ str([destination.rowval,destination.colval]))
             Drow = destination.rowval
             Dcol = destination.colval
