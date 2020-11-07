@@ -478,6 +478,16 @@ while loop:
             #possiblePieces = get_pieces(BOARD, pToMove)
             possiblePieces = get_pieces(BOARD,"all") 
             pToMove = random.randrange(len(possiblePieces))
+            while True:
+                check = False
+                for neighbor in possiblePieces[pToMove].neighbors:
+                    if neighbor.player != "agent":
+                        check = True
+                if check == False:
+                    pToMove = random.randrange(len(possiblePieces))
+                else:
+                    break
+        
             dummyVariable, destination = minimax(BOARD, possiblePieces[pToMove] 
             , 2, True)
             unitSelected = possiblePieces[pToMove]
