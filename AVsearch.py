@@ -361,7 +361,18 @@ def get_pieces(GB, p_type):
     if(len(p_loc)==0):
         return None
     else: 
-        return p_loc
+        return p_loc 
+    
+def get_ADV_pieces(GB,p_type): 
+    p_loc = [None]*0
+    for i in range(GB.side):
+            for j in range(GB.side):
+                if GB.board[i][j].player == "adversary":
+                    if GB.board[i][j].unit == p_type:
+                        p_loc.append(GB.board[i][j]) 
+    
+    return p_loc
+    
 
 def win_matchup(p_type):
     if p_type == "mage":
@@ -372,16 +383,21 @@ def win_matchup(p_type):
         return "mage"
 
 def euclid_dist(p1,p2):
-    return  np.sqrt((p1[0]-p2[0])^2 + (p1[1]-p2[1])^2)
+    return  np.sqrt((p1[0]-p2[0])**2 + (p1[1]-p2[1])**2)
 
 
 def closest_m(GB, pos, m_type):
     if m_type == "win": 
-        w_m = [ euclid_dist([pos.rowval,pos.colval],[p.rowval,p.colval]) 
-        for p in get_pieces(GB,win_matchup(pos.unit)) ] 
+        #w_m = [ euclid_dist([pos.rowval,pos.colval],[p.rowval,p.colval]) 
+        #for p in get_pieces(GB,win_matchup(pos.unit)) ]  
+        w_m = [None]*0
+        for p in get_ADV_pieces(GB,win_matchup(pos.unit)): 
+            w_m.append(euclid_dist([pos.rowval,pos.colval],[p.rowval,p.colval]))
+        
+        print(min(w_m))
         return  min(w_m)
             
-    else:
+    else: 
         d_m = [ euclid_dist([pos.rowval,pos.colval],[p.rowval,p.colval]) 
         for p in get_pieces(GB,pos.unit) ]
         return min(d_m) 
@@ -389,8 +405,7 @@ def closest_m(GB, pos, m_type):
 
 def static_eval(GB,position): 
     
-    return 0.10 * total_pieces(GB)  #+ 0.25 * closest_m(GB, position, "draw") 
-    + 0.70 * (1/closest_m(GB,position,"win"))
+    return (1/closest_m(GB,position,"win"))
     #return random.randint(1,100)
 
 def minimax(GB,position, tree_depth, maximizingPlayer):
@@ -400,6 +415,7 @@ def minimax(GB,position, tree_depth, maximizingPlayer):
      if maximizingPlayer:
          MaxOut = -math.inf
          p_moves = position.neighbors
+         bestMove = position
          for move in p_moves:
              if move.player != "agent":
                 bestMove = move 
@@ -424,6 +440,7 @@ def minimax(GB,position, tree_depth, maximizingPlayer):
      else: 
          MinOut = math.inf
          p_moves = position.neighbors
+         bestMove = position
          for move in p_moves:
              if move.player != "agent":
                 bestMove = move
