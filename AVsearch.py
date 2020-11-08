@@ -521,6 +521,19 @@ def alphaBetaPruning(GB, position, tree_depth, alpha, beta, maximizingPlayer):
                  break
          return value, bestMove
 
+class node:
+    def __init__(self, stat_eval, tile):
+        self.stat_eval = stat_eval 
+        self.tile = tile
+    
+    def set_tile(self,newTile):
+        self.tile = newTile 
+    
+    def set_value(self,val):
+        self,set_eval = val 
+    
+    """just use sorted algo with key = node.stat_eval """
+    
 def alphaBetaPruningPQ(GB, position, tree_depth, alpha, beta, maximizingPlayer):
      if tree_depth == 0 :#or goal(position,p_type):  
          return static_eval(GB, position), position #static evaluation
