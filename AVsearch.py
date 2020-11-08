@@ -399,12 +399,16 @@ def closest_m(GB, pos, m_type):
         print(pos.unit)
         for item in get_ADV_pieces(GB,win_matchup(pos.unit)):
             print([item.rowval,item.colval])
-        print("\n")  
+        print("\n")
+        if(len(w_m) == 0):
+            return closest_m(GB, pos, "draw") 
         return  min(w_m)
             
     else: 
         d_m = [ euclid_dist([pos.rowval,pos.colval],[p.rowval,p.colval]) 
         for p in get_pieces(GB,pos.unit) ]
+        if(len(w_m) == 0):
+            return 0
         return min(d_m) 
 
 
