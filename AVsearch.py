@@ -533,7 +533,7 @@ class node:
         self,set_eval = val 
     
     """just use sorted algo with key = node.stat_eval """
-    
+
 def alphaBetaPruningPQ(GB, position, tree_depth, alpha, beta, maximizingPlayer):
      if tree_depth == 0 :#or goal(position,p_type):  
          return static_eval(GB, position), position #static evaluation
@@ -544,13 +544,15 @@ def alphaBetaPruningPQ(GB, position, tree_depth, alpha, beta, maximizingPlayer):
         for move in p_moves:
             if move.player != "agent":
                 bestMove = move
-        pqueue = PriorityQueue()
+        #pqueue = PriorityQueue()
+        queue = []
         for move in p_moves:
-            pqueue.put(-static_eval(GB, move), move)
-        while not pqueue.empty(): 
-            #print("Look HERE")
-            #print(pqueue.get())
-            move = pqueue.get
+            queue.append(node(static_eval(GB, move), move))
+        queue = sorted(queue, key = lambda node: node.stat_eval)
+        while len(queue) != 0: 
+            stuff = queue.pop(0)
+            print("static eval maximizing player is: " + str(stuff.stat_eval))
+            move = stuff.tile
             if move.unit == "pit" or move.player == "agent":
                 continue   
             hold = move.unit 
@@ -564,38 +566,42 @@ def alphaBetaPruningPQ(GB, position, tree_depth, alpha, beta, maximizingPlayer):
             alpha = max(alpha,value) 
             #MAIN CRUCIAL CHECK HERE!
             if beta <= alpha:
-                print("I made it here maximizingPlayer")
+                print("I made it here maximizingPlayer with alpha: " + str(alpha))
                 break
         return value, bestMove
      
      else: 
-         value = math.inf
-         p_moves = position.neighbors
-         bestMove = position
-         for move in p_moves:
-             if move.player != "agent":
+        print("I MADE IT HERE") 
+        value = math.inf
+        p_moves = position.neighbors
+        bestMove = position
+        for move in p_moves:
+            if move.player != "agent":
                 bestMove = move 
-         pqueue = PriorityQueue()
-         for move in p_moves:
-            pqueue.put(static_eval(GB, move), move)       
-         while not pqueue.empty():
-             move = pqueue.get()
-             if move.unit == "pit" or move.player == "agent":
-                 continue
-             hold = move.unit 
-             GB.board[move.rowval][move.colval].unit  = position.unit   
-             currEval, bs = alphaBetaPruning(GB,GB.board[move.rowval][move.colval] 
-             , tree_depth - 1, alpha, beta, True)
-             GB.board[move.rowval][move.colval].unit = hold
-             if value > currEval:
-                 bestMove = move
-                 value = currEval
-             beta  = min(beta, value)
-             #DON'T CHECK IF BETA <= ALPHA
-             if beta <= alpha:
-                 print("I made it here minimizingPlayer")
-                 break
-         return value, bestMove
+        queue = []
+        for move in p_moves:
+            queue.append(node(-static_eval(GB, move), move))
+        queue = sorted(queue, key = lambda node: node.stat_eval)
+        while len(queue) != 0: 
+            stuff = queue.pop(0)
+            print("static eval minimizing player is: " + str(stuff.stat_eval))
+            move = stuff.tile
+            if move.unit == "pit" or move.player == "agent":
+                continue
+            hold = move.unit 
+            GB.board[move.rowval][move.colval].unit  = position.unit   
+            currEval, bs = alphaBetaPruning(GB,GB.board[move.rowval][move.colval] 
+            , tree_depth - 1, alpha, beta, True)
+            GB.board[move.rowval][move.colval].unit = hold
+            if value > currEval:
+                bestMove = move
+                value = currEval
+            beta  = min(beta, value)
+            #DON'T CHECK IF BETA <= ALPHA
+            if beta <= alpha:
+                print("I made it here minimizingPlayer")
+                break
+        return value, bestMove
 
 #visualization loop
 loop = True
@@ -624,7 +630,7 @@ while loop:
             #dummyVariable, destination = minimax(BOARD, possiblePieces[pToMove] 
             #, 6, True)
             dummyVariable, destination = alphaBetaPruningPQ(BOARD, possiblePieces[pToMove] 
-            , 3, 0, 0, True)
+            , 5, -math.inf, math.inf, True)
             unitSelected = possiblePieces[pToMove] 
             print("output from minimax"+ str(dummyVariable))
             print("final move"+ str([destination.rowval,destination.colval]))
