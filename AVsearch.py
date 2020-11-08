@@ -406,8 +406,8 @@ def closest_m(GB, pos, m_type):
             
     else: 
         d_m = [ euclid_dist([pos.rowval,pos.colval],[p.rowval,p.colval]) 
-        for p in get_pieces(GB,pos.unit) ]
-        if(len(w_m) == 0):
+        for p in get_ADV_pieces(GB,pos.unit) ]
+        if(len(d_m) == 0):
             return 0
         return min(d_m) 
 
